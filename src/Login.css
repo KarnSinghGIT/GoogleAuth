@@ -1,0 +1,376 @@
+/* Base styles */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Left side - Login Form */
+.login-form-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+}
+
+.login-box h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  text-align: left;
+}
+
+.welcome-text {
+  color: #666;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4a6cf7;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #555;
+}
+
+.forgot-password {
+  color: #000000;  /* Black color */
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #cf1313;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.3s;
+}
+
+/* Google Sign-In Button Styles */
+.google-signin-container {
+  width: 100%;
+  margin: 10px 0; /* Reduced margin */
+  display: flex;
+  justify-content: center;
+  height: 36px; /* Match button height */
+}
+
+/* Google Sign-In Button Container */
+.google-signin-container {
+  width: 100%;
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Google Button Styling */
+#google-signin-button {
+  width: 100%;
+  max-width: 400px; /* Match your sign-in button's max-width */
+  margin: 0 auto;
+  display: block;
+}
+
+/* Adjust the Google button iframe */
+#google-signin-button iframe {
+  width: 100% !important;
+  height: 42px !important;
+  border: none !important;
+  border-radius: 50px !important;
+  margin: 0 auto;
+}
+
+/* Remove any conflicting styles */
+#google-signin-button > div {
+  background: transparent !important;
+}
+/* Make sure the Google button doesn't overflow on mobile */
+@media (max-width: 480px) {
+  .google-signin-container {
+    margin: 10px 0;
+  }
+  
+  #google-signin-button iframe {
+    transform: scale(0.95);
+    transform-origin: left top;
+  }
+}
+
+/* Style the divider between Google Sign-In and email form */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.divider:not(:empty)::before {
+  margin-right: 1em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 1em;
+}
+
+/* Hide the old Google button */
+.google-button {
+  display: none !important;
+}
+
+.login-button:hover {
+  background-color: #882c13;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #999;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #eee;
+}
+
+.divider::before {
+  margin-right: 1rem;
+}
+
+.divider::after {
+  margin-left: 1rem;
+}
+
+.google-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: white;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.google-button:hover {
+  background-color: #f5f5f5;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+}
+
+/* Right side - Image */
+.login-image-container {
+  width: 50%;
+  background-image: url('http://localhost:3000/Untitled.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f5f5f5;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-form-container,
+  .login-image-container {
+    width: 100%;
+    min-height: 50vh;
+  }
+  
+  .login-box {
+    padding: 1rem;
+  }
+}
+
+/* Error message styling */
+.error-message {
+  color: #e74c3c;
+  background-color: #fde8e8;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+}
+/* Email Popup Styles */
+.email-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.email-popup {
+  background: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.email-popup h3 {
+  margin: 20px 20px 0;
+  color: #202124;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.email-popup p {
+  margin: 8px 20px 20px;
+  color: #5f6368;
+  font-size: 16px;
+}
+
+.email-list {
+  border-top: 1px solid #dadce0;
+  border-bottom: 1px solid #dadce0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.email-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.email-option:hover {
+  background-color: #f1f3f4;
+}
+
+.email-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.email-address {
+  font-size: 14px;
+  color: #3c4043;
+}
+
+.popup-footer {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.use-another-account {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.use-another-account:hover {
+  background-color: #f1f3f4;
+}
+.google-signin-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Make sure the Google button fits your design */
+.google-signin-wrapper iframe {
+  width: 100% !important;
+}
