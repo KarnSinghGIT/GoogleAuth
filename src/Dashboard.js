@@ -4,10 +4,11 @@ import './Dashboard.css';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    // Use the logout function from context which clears everything
+    logout();
     navigate('/login');
   };
 
@@ -16,6 +17,13 @@ function Dashboard() {
     if (user?.name) return user.name.charAt(0).toUpperCase();
     if (user?.email) return user.email.charAt(0).toUpperCase();
     return 'U'; // Default initial
+  };
+
+  // Get user display name
+  const getDisplayName = () => {
+    if (user?.name) return user.name;
+    if (user?.email) return user.email;
+    return 'User';
   };
 
   return (
@@ -36,8 +44,11 @@ function Dashboard() {
       
       <main className="dashboard-content">
         <section className="welcome-section">
-          <h2>Welcome back!</h2>
+          <h2>Welcome back, {getDisplayName()}! 👋</h2>
           <p>You're now logged in to your dashboard.</p>
+          {user?.email && (
+            <p className="user-email">Logged in as: <strong>{user.email}</strong></p>
+          )}
         </section>
 
         <section className="stats-section">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';
 import './Login.css';
 
 function Login({ onLogin }) {
@@ -8,6 +9,7 @@ function Login({ onLogin }) {
   const [isGoogleScriptLoaded, setIsGoogleScriptLoaded] = useState(false);
   const [isPageReady, setIsPageReady] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   // Environment variables
   const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -45,11 +47,23 @@ function Login({ onLogin }) {
         callback: (response) => {
           // Decode the JWT token to get user info
           const userInfo = JSON.parse(atob(response.credential.split('.')[1]));
-          onLogin?.({ 
+          
+          // Create user object with all necessary information
+          const userData = {
             email: userInfo.email,
             name: userInfo.name,
-            picture: userInfo.picture
-          });
+            picture: userInfo.picture,
+            givenName: userInfo.given_name,
+            familyName: userInfo.family_name
+          };
+          
+          // Save user to context
+          setUser(userData);
+          
+          // Save user to localStorage for persistence
+          localStorage.setItem('user', JSON.stringify(userData));
+          
+          onLogin?.(userData);
           navigate('/dashboard');
         },
         prompt_parent_id: 'google-signin-container',
@@ -128,7 +142,18 @@ function Login({ onLogin }) {
 
   const handleEmailSelect = (email) => {
     setSelectedEmail(email);
-    onLogin?.({ email });
+    
+    // Create user object from email
+    const userData = {
+      email: email,
+      name: email.split('@')[0], // Use the part before @ as name
+    };
+    
+    // Save to context and localStorage
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+    
+    onLogin?.(userData);
     navigate('/dashboard');
   };
 

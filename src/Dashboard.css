@@ -51,6 +51,18 @@
   font-size: 1.1rem;
 }
 
+.user-email {
+  color: #888;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.user-email strong {
+  color: #4a6cf7;
+  font-weight: 600;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
