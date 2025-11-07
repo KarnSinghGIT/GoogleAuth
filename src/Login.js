@@ -25,6 +25,7 @@ function Login({ onLogin }) {
   const initializeGoogleSignIn = useCallback(() => {
     // Validate client ID
     if (!GOOGLE_CLIENT_ID) {
+      console.warn('Google Client ID not configured. Make sure REACT_APP_GOOGLE_CLIENT_ID is set in your .env file');
       setShowEmailPopup(true);
       return;
     }
@@ -37,6 +38,7 @@ function Login({ onLogin }) {
     }
 
     if (!window.google) {
+      console.warn('Google SDK not loaded. Check your internet connection and Google client ID.');
       setShowEmailPopup(true);
       return;
     }
@@ -45,26 +47,31 @@ function Login({ onLogin }) {
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (response) => {
-          // Decode the JWT token to get user info
-          const userInfo = JSON.parse(atob(response.credential.split('.')[1]));
-          
-          // Create user object with all necessary information
-          const userData = {
-            email: userInfo.email,
-            name: userInfo.name,
-            picture: userInfo.picture,
-            givenName: userInfo.given_name,
-            familyName: userInfo.family_name
-          };
-          
-          // Save user to context
-          setUser(userData);
-          
-          // Save user to localStorage for persistence
-          localStorage.setItem('user', JSON.stringify(userData));
-          
-          onLogin?.(userData);
-          navigate('/dashboard');
+          try {
+            // Decode the JWT token to get user info
+            const userInfo = JSON.parse(atob(response.credential.split('.')[1]));
+            
+            // Create user object with all necessary information
+            const userData = {
+              email: userInfo.email,
+              name: userInfo.name,
+              picture: userInfo.picture,
+              givenName: userInfo.given_name,
+              familyName: userInfo.family_name
+            };
+            
+            // Save user to context
+            setUser(userData);
+            
+            // Save user to localStorage for persistence
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            onLogin?.(userData);
+            navigate('/dashboard');
+          } catch (error) {
+            console.error('Error processing Google Sign-In response:', error);
+            setShowEmailPopup(true);
+          }
         },
         prompt_parent_id: 'google-signin-container',
         ux_mode: 'popup'
@@ -85,9 +92,10 @@ function Login({ onLogin }) {
       );
       
     } catch (error) {
+      console.error('Error initializing Google Sign-In:', error);
       setShowEmailPopup(true);
     }
-  }, [GOOGLE_CLIENT_ID, navigate, onLogin]);
+  }, [GOOGLE_CLIENT_ID, navigate, onLogin, setUser]);
 
   // Load Google Sign-In script
   useEffect(() => {

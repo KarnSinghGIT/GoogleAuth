@@ -51,7 +51,7 @@ function Dashboard() {
           )}
         </section>
 
-        <section className="stats-section">
+        {/* <section className="stats-section">
           <div className="stats-grid">
             <div className="stat-card">
               <h3>Total Users</h3>
@@ -70,14 +70,14 @@ function Dashboard() {
               <p className="stat-number">5</p>
             </div>
           </div>
-        </section>
+        </section> */}
 
         <section className="activity-section">
           <h3>Recent Activity</h3>
           <ul className="activity-list">
             <li>• You logged in</li>
-            <li>• Profile updated successfully</li>
-            <li>• New project created: Dashboard UI</li>
+            {/* <li>• Profile updated successfully</li>
+            <li>• New project created: Dashboard UI</li> */}
           </ul>
         </section>
       </main>
