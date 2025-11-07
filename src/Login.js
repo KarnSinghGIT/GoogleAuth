@@ -148,22 +148,22 @@ function Login({ onLogin }) {
     return () => clearTimeout(timer);
   }, [isGoogleScriptLoaded]);
 
-  const handleEmailSelect = (email) => {
-    setSelectedEmail(email);
+  // const handleEmailSelect = (email) => {
+  //   setSelectedEmail(email);
     
-    // Create user object from email
-    const userData = {
-      email: email,
-      name: email.split('@')[0], // Use the part before @ as name
-    };
+  //   // Create user object from email
+  //   const userData = {
+  //     email: email,
+  //     name: email.split('@')[0], // Use the part before @ as name
+  //   };
     
-    // Save to context and localStorage
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+  //   // Save to context and localStorage
+  //   setUser(userData);
+  //   localStorage.setItem('user', JSON.stringify(userData));
     
-    onLogin?.(userData);
-    navigate('/dashboard');
-  };
+  //   onLogin?.(userData);
+  //   navigate('/dashboard');
+  // };
 
   // Show loading state until page is ready
   if (!isPageReady) {
@@ -229,7 +229,7 @@ function Login({ onLogin }) {
       </div>
 
       {/* Fallback Email Selection Popup */}
-      {showEmailPopup && (
+      {/* {showEmailPopup && (
         <div className="email-popup-overlay">
           <div className="email-popup">
             <h3>Choose an account</h3>
@@ -256,7 +256,7 @@ function Login({ onLogin }) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <div className="login-image-container"></div>
     </div>
