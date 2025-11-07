@@ -6,6 +6,7 @@ function Login({ onLogin }) {
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState('');
   const [isGoogleScriptLoaded, setIsGoogleScriptLoaded] = useState(false);
+  const [isPageReady, setIsPageReady] = useState(false);
   const navigate = useNavigate();
 
   // Environment variables
@@ -26,8 +27,15 @@ function Login({ onLogin }) {
       return;
     }
 
+    // Wait for the button element to be available
+    const googleButtonElement = document.getElementById('google-signin-button');
+    if (!googleButtonElement) {
+      setTimeout(() => initializeGoogleSignIn(), 150);
+      return;
+    }
+
     if (!window.google) {
-      console.error('Google script not loaded');
+      setShowEmailPopup(true);
       return;
     }
 
@@ -35,7 +43,6 @@ function Login({ onLogin }) {
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (response) => {
-          console.log('Google sign-in successful', response);
           // Decode the JWT token to get user info
           const userInfo = JSON.parse(atob(response.credential.split('.')[1]));
           onLogin?.({ 
@@ -50,32 +57,33 @@ function Login({ onLogin }) {
       });
 
       // Render the button
-window.google.accounts.id.renderButton(
-  document.getElementById('google-signin-button'),
-  { 
-    type: 'standard',
-    theme: 'outline',
-    size: 'large',
-    width: '400',  // Match this with your CSS max-width
-    text: 'signin_with',
-    shape: 'pill',
-    logo_alignment: 'left'
-  }
-);
+      window.google.accounts.id.renderButton(
+        googleButtonElement,
+        { 
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          width: '400',
+          text: 'signin_with',
+          shape: 'pill',
+          logo_alignment: 'left'
+        }
+      );
       
     } catch (error) {
-      console.error('Error initializing Google Sign-In:', error);
       setShowEmailPopup(true);
     }
   }, [GOOGLE_CLIENT_ID, navigate, onLogin]);
 
   // Load Google Sign-In script
   useEffect(() => {
+    // Check if script already exists
     if (document.querySelector(`script[src="${GOOGLE_SCRIPT_URL}"]`)) {
       setIsGoogleScriptLoaded(true);
       return;
     }
 
+    // Create and load script
     const script = document.createElement('script');
     script.src = GOOGLE_SCRIPT_URL;
     script.async = true;
@@ -83,10 +91,14 @@ window.google.accounts.id.renderButton(
     script.onload = () => {
       setIsGoogleScriptLoaded(true);
     };
+    script.onerror = () => {
+      setShowEmailPopup(true);
+    };
     
     document.body.appendChild(script);
 
     return () => {
+      // Cleanup script on unmount
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
@@ -100,11 +112,40 @@ window.google.accounts.id.renderButton(
     }
   }, [isGoogleScriptLoaded, initializeGoogleSignIn]);
 
+  // Set page ready when script is loaded or fallback fails
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageReady(true);
+    }, 2000); // 2 second timeout to ensure page renders
+
+    if (isGoogleScriptLoaded) {
+      setIsPageReady(true);
+      clearTimeout(timer);
+    }
+
+    return () => clearTimeout(timer);
+  }, [isGoogleScriptLoaded]);
+
   const handleEmailSelect = (email) => {
     setSelectedEmail(email);
     onLogin?.({ email });
     navigate('/dashboard');
   };
+
+  // Show loading state until page is ready
+  if (!isPageReady) {
+    return (
+      <div className="login-container">
+        <div className="login-form-container">
+          <div className="login-box">
+            <h1>Loading...</h1>
+            <p className="welcome-text">Please wait while we prepare the login page</p>
+          </div>
+        </div>
+        <div className="login-image-container"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
