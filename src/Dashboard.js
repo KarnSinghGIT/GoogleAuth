@@ -72,14 +72,14 @@ function Dashboard() {
           </div>
         </section> */}
 
-        <section className="activity-section">
+        {/* <section className="activity-section">
           <h3>Recent Activity</h3>
           <ul className="activity-list">
             <li>• You logged in</li>
-            {/* <li>• Profile updated successfully</li>
-            <li>• New project created: Dashboard UI</li> */}
+            <li>• Profile updated successfully</li>
+            <li>• New project created: Dashboard UI</li>
           </ul>
-        </section>
+        </section> */}
       </main>
 
       <footer className="dashboard-footer">
