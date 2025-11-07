@@ -8,6 +8,10 @@ function Login({ onLogin }) {
   const [isGoogleScriptLoaded, setIsGoogleScriptLoaded] = useState(false);
   const navigate = useNavigate();
 
+  // Environment variables
+  const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const GOOGLE_SCRIPT_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
+
   // Mock list of emails (in a real app, this would come from your backend)
   const mockEmails = [
     'user1@gmail.com',
@@ -16,6 +20,12 @@ function Login({ onLogin }) {
   ];
 
   const initializeGoogleSignIn = useCallback(() => {
+    // Validate client ID
+    if (!GOOGLE_CLIENT_ID) {
+      setShowEmailPopup(true);
+      return;
+    }
+
     if (!window.google) {
       console.error('Google script not loaded');
       return;
@@ -23,7 +33,7 @@ function Login({ onLogin }) {
 
     try {
       window.google.accounts.id.initialize({
-        client_id: '500438955881-uatc8v9mh09n5boff6t17m27b1bhos8v.apps.googleusercontent.com',
+        client_id: GOOGLE_CLIENT_ID,
         callback: (response) => {
           console.log('Google sign-in successful', response);
           // Decode the JWT token to get user info
@@ -57,17 +67,17 @@ window.google.accounts.id.renderButton(
       console.error('Error initializing Google Sign-In:', error);
       setShowEmailPopup(true);
     }
-  }, [navigate, onLogin]);
+  }, [GOOGLE_CLIENT_ID, navigate, onLogin]);
 
   // Load Google Sign-In script
   useEffect(() => {
-    if (document.querySelector('script[src="https://accounts.google.com/gsi/client"]')) {
+    if (document.querySelector(`script[src="${GOOGLE_SCRIPT_URL}"]`)) {
       setIsGoogleScriptLoaded(true);
       return;
     }
 
     const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+    script.src = GOOGLE_SCRIPT_URL;
     script.async = true;
     script.defer = true;
     script.onload = () => {
@@ -81,7 +91,7 @@ window.google.accounts.id.renderButton(
         document.body.removeChild(script);
       }
     };
-  }, []);
+  }, [GOOGLE_SCRIPT_URL]);
 
   // Initialize Google Sign-In when script is loaded
   useEffect(() => {
